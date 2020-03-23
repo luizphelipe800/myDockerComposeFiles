@@ -1,0 +1,40 @@
+version: '3'
+
+services: 
+    backend:
+        container_name: backend
+        image: node:12
+        ports: 
+            - '3000:3000'
+        working_dir: /app
+        volumes: 
+            - /backend:/app
+        networks: 
+            - base
+            - database
+        command: 'yarn && yarn start'
+        depends_on: 
+            - db
+    frontend:
+        container_name: frontend
+        image: node:12
+        ports: 
+            - '80:8000'
+        working_dir: /app
+        volumes: 
+            - /frontend:/app
+        networks: 
+            - base
+        command: 'yarn && yarn start'
+    db:
+        container_name: database
+        image: mysql
+        ports: 
+            - '3306:3306'
+        volumes: 
+            - /local_storage_path:/docker_storage_path
+        networks: 
+            - database
+networks: 
+    base:
+    database:
